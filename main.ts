@@ -15,7 +15,7 @@ function aff_nb_tours () {
         basic.showNumber(nb_tour_b)
     }
 }
-pins.onPulsed(DigitalPin.P1, PulseValue.Low, function () {
+pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
     if (fin == 0) {
         if (a == 29) {
             nb_tour_a += 1
