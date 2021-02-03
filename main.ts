@@ -88,9 +88,9 @@ let nb_tour_a = 0
 let strip: neopixel.Strip = null
 music.setBuiltInSpeakerEnabled(true)
 strip = neopixel.create(DigitalPin.P8, 30, NeoPixelMode.RGB)
-demarrage()
 pins.setEvents(DigitalPin.P1, PinEventType.Edge)
 pins.setEvents(DigitalPin.P12, PinEventType.Edge)
+demarrage()
 basic.forever(function () {
     aff_led()
     basic.pause(100)
