@@ -40,11 +40,12 @@ pins.onPulsed(DigitalPin.P13, PulseValue.High, function () {
     if (fin == 0) {
         if (b == 29) {
             nb_tour_b += 1
+            aff_nb_tours()
             if (nb_tour_b == nb_tour_total) {
                 fin = 1
                 animation("b")
             }
-            a = 0
+            b = 0
         } else {
             b = b + 1
         }
@@ -65,6 +66,7 @@ pins.onPulsed(DigitalPin.P12, PulseValue.Low, function () {
     if (fin == 0) {
         if (a == 29) {
             nb_tour_a += 1
+            aff_nb_tours()
             if (nb_tour_a == nb_tour_total) {
                 fin = 1
                 animation("a")
@@ -87,12 +89,9 @@ let strip: neopixel.Strip = null
 music.setBuiltInSpeakerEnabled(true)
 strip = neopixel.create(DigitalPin.P8, 30, NeoPixelMode.RGB)
 demarrage()
+pins.setEvents(DigitalPin.P1, PinEventType.Edge)
 pins.setEvents(DigitalPin.P12, PinEventType.Edge)
-pins.setEvents(DigitalPin.P13, PinEventType.Edge)
 basic.forever(function () {
-    for (let index = 0; index < 4; index++) {
-        aff_led()
-        basic.pause(300)
-    }
-    aff_nb_tours()
+    aff_led()
+    basic.pause(100)
 })
