@@ -15,40 +15,11 @@ function aff_nb_tours () {
         basic.showNumber(nb_tour_b)
     }
 }
-pins.onPulsed(DigitalPin.P1, PulseValue.High, function () {
-    if (fin == 0) {
-        if (a == 29) {
-            nb_tour_a += 1
-            aff_nb_tours()
-        }
-        a = (a + 1) % 30
-        music.playTone(440, music.beat(BeatFraction.Sixteenth))
-        aff_led()
-        if (nb_tour_a == nb_tour_total) {
-            animation("a")
-            fin = 1
-        }
-    }
-})
-pins.onPulsed(DigitalPin.P2, PulseValue.High, function () {
-    if (fin == 0) {
-        if (b == 29) {
-            nb_tour_b += 1
-            aff_nb_tours()
-        }
-        b = (b + 1) % 30
-        music.playTone(262, music.beat(BeatFraction.Sixteenth))
-        aff_led()
-        if (nb_tour_b == nb_tour_total) {
-            animation("b")
-            fin = 1
-        }
-    }
-})
 input.onButtonPressed(Button.AB, function () {
     demarrage()
 })
 function demarrage () {
+    fin = 1
     strip.clear()
     strip.show()
     a = 0
@@ -65,6 +36,21 @@ function demarrage () {
     basic.showIcon(IconNames.Happy)
     fin = 0
 }
+pins.onPulsed(DigitalPin.P13, PulseValue.High, function () {
+    if (fin == 0) {
+        if (b == 29) {
+            nb_tour_b += 1
+            if (nb_tour_b == nb_tour_total) {
+                fin = 1
+                animation("b")
+            }
+            a = 0
+        } else {
+            b = b + 1
+        }
+        music.playTone(262, music.beat(BeatFraction.Sixteenth))
+    }
+})
 function aff_led () {
     strip.clear()
     if (a == b) {
@@ -75,15 +61,38 @@ function aff_led () {
     }
     strip.show()
 }
+pins.onPulsed(DigitalPin.P12, PulseValue.Low, function () {
+    if (fin == 0) {
+        if (a == 29) {
+            nb_tour_a += 1
+            if (nb_tour_a == nb_tour_total) {
+                fin = 1
+                animation("a")
+            }
+            a = 0
+        } else {
+            a = a + 1
+        }
+        music.playTone(440, music.beat(BeatFraction.Sixteenth))
+    }
+})
 let rebours = 0
-let b = 0
 let nb_tour_total = 0
+let b = 0
 let a = 0
+let fin = 0
 let nb_tour_b = 0
 let nb_tour_a = 0
 let strip: neopixel.Strip = null
-let fin = 0
-fin = 1
 music.setBuiltInSpeakerEnabled(true)
 strip = neopixel.create(DigitalPin.P8, 30, NeoPixelMode.RGB)
 demarrage()
+pins.setEvents(DigitalPin.P12, PinEventType.Edge)
+pins.setEvents(DigitalPin.P13, PinEventType.Edge)
+basic.forever(function () {
+    for (let index = 0; index < 4; index++) {
+        aff_led()
+        basic.pause(300)
+    }
+    aff_nb_tours()
+})
